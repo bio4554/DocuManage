@@ -9,6 +9,6 @@ namespace DocuManage.Data.Models
     public class FolderDto
     {
         public Guid Id { get; set; }
-        public FolderDto Parent { get; set; }
+        public Guid Parent { get; set; }
     }
 }
