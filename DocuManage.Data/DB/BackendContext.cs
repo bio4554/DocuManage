@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DocuManage.Data.DB
 {
-    public class DatabaseContext : DbContext
+    public class BackendContext : DbContext
     {
-        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
+        public BackendContext(DbContextOptions<BackendContext> options) : base(options)
         {
 
         }

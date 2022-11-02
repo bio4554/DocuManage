@@ -1,3 +1,4 @@
+using DocuManage.Data;
 using DocuManage.Data.DB;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,8 +28,9 @@ namespace DocuManage
             // DI
             builder.Services
                 .AddLogging()
-                .AddDbContextFactory<DatabaseContext>(opt => opt.UseNpgsql(connectionString))
-                .AddDbContext<DbContext, DatabaseContext>(opt => opt.UseNpgsql(connectionString));
+                .AddDbContextFactory<BackendContext>(opt => opt.UseNpgsql(connectionString))
+                .AddDbContext<DbContext, BackendContext>(opt => opt.UseNpgsql(connectionString))
+                .AddScoped<IDocumentRepository, DocumentRepository>();
             
             var app = builder.Build();
 
