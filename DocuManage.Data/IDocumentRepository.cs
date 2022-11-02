@@ -10,5 +10,10 @@ namespace DocuManage.Data
     public interface IDocumentRepository
     {
         public Task<DocumentDto?> GetDocument(Guid id);
+        public Task<FolderDto?> CreateFolder(FolderDto folder);
+        public Task<DocumentDto?> CreateDocument(DocumentDto document);
+        public FolderDto? GetFolder(Guid id);
+        public List<DocumentDto> GetChildrenDocuments(FolderDto folder);
+        public List<FolderDto> GetChildrenFolders(Guid id);
     }
 }

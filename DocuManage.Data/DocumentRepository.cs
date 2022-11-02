@@ -21,9 +21,37 @@ namespace DocuManage.Data
 
         public async Task<DocumentDto?> CreateDocument(DocumentDto document)
         {
-            _db.Set<DocumentDto>().Add(document);
+            var response = _db.Set<DocumentDto>().Add(document);
             await _db.SaveChangesAsync();
+            document.Id = response.Entity.Id;
             return document;
+        }
+
+        public async Task<FolderDto?> CreateFolder(FolderDto folder)
+        {
+            var response = _db.Set<FolderDto>().Add(folder);
+            await _db.SaveChangesAsync();
+            folder.Id = response.Entity.Id;
+            return folder;
+        }
+
+        public List<FolderDto> GetChildrenFolders(Guid id)
+        {
+            var response = _db.Set<FolderDto>().Where(f => f.Parent == id).ToList();
+
+            return response;
+        }
+
+        public List<DocumentDto> GetChildrenDocuments(FolderDto folder)
+        {
+            var response = _db.Set<DocumentDto>().Where(d => d.Folder == folder).ToList();
+
+            return response;
+        }
+
+        public FolderDto? GetFolder(Guid id)
+        {
+            return _db.Set<FolderDto>().Find(id);
         }
     }
 }
