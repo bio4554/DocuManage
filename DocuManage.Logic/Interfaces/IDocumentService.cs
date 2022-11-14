@@ -20,5 +20,6 @@ namespace DocuManage.Logic.Interfaces
 
         public Task<FolderInfo?> GetFolderInfo(Guid id);
         public Task<FolderDto?> GetFolder(Guid id);
+        public Task<MemoryStream> GetFileStream(Guid id);
     }
 }

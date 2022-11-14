@@ -17,14 +17,23 @@ namespace DocuManage.Logic.Services
             _blobService = blobService;
         }
 
-        public async Task<string> UploadFile(IFormFile file)
+        public async Task<string> UploadFileAsync(IFormFile file)
         {
             var fileStream = new MemoryStream();
             await file.OpenReadStream().CopyToAsync(fileStream);
 
-            var response = _blobService.UploadBlob(fileStream, "test", "test");
+            fileStream.Position = 0;
 
-            return await response;
+            var safeName = Guid.NewGuid();
+
+            var response = await _blobService.UploadBlob(fileStream, safeName.ToString(), "test");
+
+            return safeName.ToString();
+        }
+
+        public async Task<MemoryStream> GetFileAsync(Guid id)
+        {
+            return await _blobService.GetBlob(id);
         }
     }
 }

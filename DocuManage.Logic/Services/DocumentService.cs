@@ -34,11 +34,13 @@ namespace DocuManage.Logic.Services
             if (document.Folder == null)
                 return null;
 
+            var fileId = await _fileService.UploadFileAsync(formFile);
+
+            document.FileId = fileId;
+
             _documents.Insert(document);
 
             _documents.SaveChanges();
-
-            await _fileService.UploadFile(formFile);
 
             return document;
         }
@@ -75,6 +77,15 @@ namespace DocuManage.Logic.Services
         public async Task<FolderDto?> GetFolder(Guid id)
         {
             return _documents.Single<FolderDto>(id);
+        }
+
+        public async Task<MemoryStream?> GetFileStream(Guid id)
+        {
+            var document = _documents.Single<DocumentDto>(id);
+
+            if (document == null) return null;
+
+            return await _fileService.GetFileAsync(new Guid(document.FileId ?? string.Empty));
         }
 
         public async Task<DocumentInfo?> GetDocumentInfo(Guid id)

@@ -1,3 +1,5 @@
+using DocuManage.Common.Interfaces;
+using DocuManage.Common.Services;
 using DocuManage.Data.DB;
 using DocuManage.Data.Interfaces;
 using DocuManage.Logic.Interfaces;
@@ -16,6 +18,12 @@ namespace DocuManage
                 .AddEnvironmentVariables()
                 .Build();
 
+            var config = new Config()
+            {
+                BlobStorageConnectionString = configuration["ConnectionStrings:BlobStorageConnectionString"],
+                BlobStorageContainerName = configuration["BlobStorageContainerName"]
+            };
+
             var connectionString = configuration["ConnectionStrings:Postgres"];
 
             var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +38,7 @@ namespace DocuManage
             // DI
             builder.Services
                 .AddLogging()
+                .AddSingleton<IConfig>(config)
                 .AddDbContextFactory<BackendContext>(opt => opt.UseNpgsql(connectionString))
                 .AddDbContext<DbContext, BackendContext>(opt => opt.UseNpgsql(connectionString))
                 .AddScoped<IDocumentRepository, DocumentRepository>()

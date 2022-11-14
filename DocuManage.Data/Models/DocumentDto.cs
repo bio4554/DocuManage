@@ -12,5 +12,6 @@ namespace DocuManage.Data.Models
         public Guid? Id { get; set; }
         public string Name { get; set; }
         public Guid Folder { get; set; }
+        public string? FileId { get; set; }
     }
 }

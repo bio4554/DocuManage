@@ -9,5 +9,6 @@ namespace DocuManage.Logic.Interfaces
     public interface IBlobService
     {
         public Task<string> UploadBlob(MemoryStream blob, string name, string path);
+        public Task<MemoryStream> GetBlob(Guid id);
     }
 }

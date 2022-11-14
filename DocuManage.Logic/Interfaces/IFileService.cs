@@ -9,6 +9,7 @@ namespace DocuManage.Logic.Interfaces
 {
     public interface IFileService
     {
-        public Task<string> UploadFile(IFormFile file);
+        public Task<string> UploadFileAsync(IFormFile file);
+        public Task<MemoryStream> GetFileAsync(Guid id);
     }
 }
