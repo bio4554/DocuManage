@@ -13,10 +13,12 @@ namespace DocuManage
     public class DocumentsController : ControllerBase
     {
         private readonly IDocumentService _documents;
+        private readonly ILogger _log;
 
-        public DocumentsController(IDocumentService documents)
+        public DocumentsController(IDocumentService documents, ILoggerFactory loggerFactory)
         {
             _documents = documents;
+            _log = loggerFactory.CreateLogger<DocumentsController>();
         }
 
         // GET: api/<ValuesController>
@@ -39,7 +41,7 @@ namespace DocuManage
 
         // POST api/<ValuesController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] PostDocumentRequest request)
+        public async Task<IActionResult> Post([FromForm] PostDocumentRequest request)
         {
             var folder = await _documents.GetFolder(request.Folder);
 
@@ -52,6 +54,10 @@ namespace DocuManage
             };
 
             var newDocument = await _documents.CreateDocument(document);
+
+            var fileName = request.File.Single().FileName;
+
+            _log.LogInformation($"Uploaded file: {fileName}");
 
             return Ok(newDocument);
         }
