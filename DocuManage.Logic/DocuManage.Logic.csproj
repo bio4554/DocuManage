@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.0.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DocuManage.Common\DocuManage.Common.csproj" />
     <ProjectReference Include="..\DocuManage.Data\DocuManage.Data.csproj" />
   </ItemGroup>

@@ -33,7 +33,9 @@ namespace DocuManage
                 .AddDbContextFactory<BackendContext>(opt => opt.UseNpgsql(connectionString))
                 .AddDbContext<DbContext, BackendContext>(opt => opt.UseNpgsql(connectionString))
                 .AddScoped<IDocumentRepository, DocumentRepository>()
-                .AddScoped<IDocumentService, DocumentService>();
+                .AddScoped<IDocumentService, DocumentService>()
+                .AddScoped<IBlobService, BlobService>()
+                .AddScoped<IFileService, FileService>();
 
             var app = builder.Build();
 

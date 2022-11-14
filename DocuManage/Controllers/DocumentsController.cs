@@ -53,7 +53,7 @@ namespace DocuManage
                 Name = request.Name
             };
 
-            var newDocument = await _documents.CreateDocument(document);
+            var newDocument = await _documents.CreateDocument(document, request.File.Single());
 
             var fileName = request.File.Single().FileName;
 

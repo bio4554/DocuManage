@@ -2,6 +2,7 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using DocuManage.Data.Interfaces;
 using DocuManage.Data.Models;
+using DocuManage.Logic.Interfaces;
 using DocuManage.Logic.Services;
 using Moq;
 
@@ -11,11 +12,13 @@ namespace DocuManage.Test.Services
     {
         private readonly IFixture _fixture;
         private Mock<IDocumentRepository> _documentRepositoryMock;
+        private Mock<IFileService> _fileServiceMock;
 
         public DocumentServiceTests()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _documentRepositoryMock = _fixture.Freeze<Mock<IDocumentRepository>>();
+            _fileServiceMock = _fixture.Freeze<Mock<IFileService>>();
         }
 
         [Fact]
@@ -25,7 +28,7 @@ namespace DocuManage.Test.Services
             _documentRepositoryMock.Setup(s => s.Single<DocumentDto>(It.IsAny<Guid>()))
                 .Returns(_fixture.Build<DocumentDto>().Create());
 
-            var service = new DocumentService(_documentRepositoryMock.Object);
+            var service = new DocumentService(_documentRepositoryMock.Object, _fileServiceMock.Object);
 
             // test
             var response = await service.GetDocument(Guid.NewGuid());
@@ -41,7 +44,7 @@ namespace DocuManage.Test.Services
             _documentRepositoryMock.Setup(s => s.Single<DocumentDto>(It.IsAny<Guid>()))
                 .Returns(_fixture.Build<DocumentDto>().Create());
 
-            var service = new DocumentService(_documentRepositoryMock.Object);
+            var service = new DocumentService(_documentRepositoryMock.Object, _fileServiceMock.Object);
 
             // test
             var response = await service.GetDocument(Guid.Empty);

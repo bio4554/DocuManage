@@ -3,16 +3,19 @@ using DocuManage.Common.Models;
 using DocuManage.Data.Interfaces;
 using DocuManage.Data.Models;
 using DocuManage.Logic.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace DocuManage.Logic.Services
 {
     public class DocumentService : IDocumentService
     {
         private readonly IDocumentRepository _documents;
+        private readonly IFileService _fileService;
 
-        public DocumentService(IDocumentRepository documents)
+        public DocumentService(IDocumentRepository documents, IFileService fileService)
         {
             _documents = documents;
+            _fileService = fileService;
         }
 
         public async Task<DocumentDto?> GetDocument(Guid id)
@@ -23,7 +26,7 @@ namespace DocuManage.Logic.Services
             return _documents.Single<DocumentDto>(id);
         }
 
-        public async Task<DocumentDto?> CreateDocument(DocumentDto document)
+        public async Task<DocumentDto?> CreateDocument(DocumentDto document, IFormFile formFile)
         {
             if (string.IsNullOrEmpty(document.Name))
                 return null;
@@ -34,6 +37,8 @@ namespace DocuManage.Logic.Services
             _documents.Insert(document);
 
             _documents.SaveChanges();
+
+            await _fileService.UploadFile(formFile);
 
             return document;
         }
