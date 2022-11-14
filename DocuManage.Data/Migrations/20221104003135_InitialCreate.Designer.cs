@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DocuManage.Data.Migrations
 {
     [DbContext(typeof(BackendContext))]
-    [Migration("20221102201703_InitialCreate")]
+    [Migration("20221104003135_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,12 +50,14 @@ namespace DocuManage.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ParentId")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("Parent")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
 
                     b.ToTable("FolderDto");
                 });
@@ -69,17 +71,6 @@ namespace DocuManage.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Folder");
-                });
-
-            modelBuilder.Entity("DocuManage.Data.Models.FolderDto", b =>
-                {
-                    b.HasOne("DocuManage.Data.Models.FolderDto", "Parent")
-                        .WithMany()
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Parent");
                 });
 #pragma warning restore 612, 618
         }

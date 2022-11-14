@@ -14,17 +14,12 @@ namespace DocuManage.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ParentId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Parent = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FolderDto", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_FolderDto_FolderDto_ParentId",
-                        column: x => x.ParentId,
-                        principalTable: "FolderDto",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -50,11 +45,6 @@ namespace DocuManage.Data.Migrations
                 name: "IX_DocumentDto_FolderId",
                 table: "DocumentDto",
                 column: "FolderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FolderDto_ParentId",
-                table: "FolderDto",
-                column: "ParentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
