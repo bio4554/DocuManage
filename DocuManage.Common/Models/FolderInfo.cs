@@ -6,9 +6,9 @@ namespace DocuManage.Common.Models
     {
         public string Name { get; set; }
         public FolderDto Folder { get; set; }
-        public DocumentDto[] Documents { get; }
+        public DocumentDto[]? Documents { get; }
 
-        public FolderDto[] Folders { get; }
+        public FolderDto[]? Folders { get; }
 
         public FolderInfo(string name, FolderDto folder, DocumentDto[] documents, FolderDto[] folders)
         {

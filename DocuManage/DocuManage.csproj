@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DocuManage.Data\DocuManage.Data.csproj" />
+    <ProjectReference Include="..\DocuManage.Logic\DocuManage.Logic.csproj" />
   </ItemGroup>
 
 </Project>

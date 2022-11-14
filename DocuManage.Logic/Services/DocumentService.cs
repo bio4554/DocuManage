@@ -1,5 +1,5 @@
 ﻿using DocuManage.Common.Models;
-using DocuManage.Data;
+using DocuManage.Data.Interfaces;
 using DocuManage.Data.Models;
 using DocuManage.Logic.Interfaces;
 
@@ -19,7 +19,7 @@ namespace DocuManage.Logic.Services
             if (id == Guid.Empty)
                 return null;
 
-            return await _documents.GetDocument(id);
+            return _documents.Single<DocumentDto>(id);
         }
 
         public async Task<DocumentDto?> CreateDocument(DocumentDto document)
@@ -30,9 +30,11 @@ namespace DocuManage.Logic.Services
             if (document.Folder == null)
                 return null;
 
-            var response = await _documents.CreateDocument(document);
+            _documents.Insert(document);
 
-            return response;
+            _documents.SaveChanges();
+
+            return document;
         }
 
         public async Task<FolderInfo?> CreateFolder(FolderDto folder)
@@ -42,24 +44,22 @@ namespace DocuManage.Logic.Services
                 return null;
             }
 
-            var dto = await _documents.CreateFolder(folder);
+            _documents.Insert(folder);
+            _documents.SaveChanges();
 
-            if (dto == null)
-                return null;
-
-            var response = new FolderInfo(folder.Name, dto, Array.Empty<DocumentDto>(), Array.Empty<FolderDto>());
+            var response = new FolderInfo(folder.Name, folder, Array.Empty<DocumentDto>(), Array.Empty<FolderDto>());
 
             return response;
         }
 
         public async Task<FolderInfo?> GetFolder(Guid id)
         {
-            var folder = _documents.GetFolder(id);
+            var folder = _documents.Single<FolderDto>(id);
             if (folder == null)
                 return null;
 
-            var childFolders = _documents.GetChildrenFolders(id);
-            var childDocs = _documents.GetChildrenDocuments(folder);
+            var childFolders = _documents.GetAll<FolderDto>().Where(f => f.Parent == id);
+            var childDocs = _documents.GetAll<DocumentDto>().Where(d => d.Folder == folder);
 
             var response = new FolderInfo(folder.Name, folder, childDocs.ToArray(), childFolders.ToArray());
 

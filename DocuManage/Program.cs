@@ -1,5 +1,7 @@
-using DocuManage.Data;
 using DocuManage.Data.DB;
+using DocuManage.Data.Interfaces;
+using DocuManage.Logic.Interfaces;
+using DocuManage.Logic.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace DocuManage
@@ -30,8 +32,9 @@ namespace DocuManage
                 .AddLogging()
                 .AddDbContextFactory<BackendContext>(opt => opt.UseNpgsql(connectionString))
                 .AddDbContext<DbContext, BackendContext>(opt => opt.UseNpgsql(connectionString))
-                .AddScoped<IDocumentRepository, DocumentRepository>();
-            
+                .AddScoped<IDocumentRepository, DocumentRepository>()
+                .AddScoped<IDocumentService, DocumentService>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

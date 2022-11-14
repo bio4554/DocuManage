@@ -10,4 +10,8 @@
     <ProjectReference Include="..\DocuManage.Data\DocuManage.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+
 </Project>
