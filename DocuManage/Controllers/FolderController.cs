@@ -31,7 +31,7 @@ namespace DocuManage.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var folder = await _documentService.GetFolder(new Guid(id));
+            var folder = await _documentService.GetFolderInfo(new Guid(id));
             if (folder is null)
             {
                 return NotFound();

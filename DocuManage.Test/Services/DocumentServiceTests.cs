@@ -22,8 +22,8 @@ namespace DocuManage.Test.Services
         public async Task GetShouldReturnValidResponse()
         {
             // setup
-            _documentRepositoryMock.Setup(s => s.GetDocument(It.IsAny<Guid>()))
-                .ReturnsAsync(_fixture.Build<DocumentDto>().Create());
+            _documentRepositoryMock.Setup(s => s.Single<DocumentDto>(It.IsAny<Guid>()))
+                .Returns(_fixture.Build<DocumentDto>().Create());
 
             var service = new DocumentService(_documentRepositoryMock.Object);
 
@@ -38,8 +38,8 @@ namespace DocuManage.Test.Services
         public async Task GetShouldReturnValidResponse_InvalidRequest()
         {
             // setup
-            _documentRepositoryMock.Setup(s => s.GetDocument(It.IsAny<Guid>()))
-                .ReturnsAsync(_fixture.Build<DocumentDto>().Create());
+            _documentRepositoryMock.Setup(s => s.Single<DocumentDto>(It.IsAny<Guid>()))
+                .Returns(_fixture.Build<DocumentDto>().Create());
 
             var service = new DocumentService(_documentRepositoryMock.Object);
 

@@ -11,11 +11,13 @@ namespace DocuManage.Logic.Interfaces
     public interface IDocumentService
     {
         public Task<DocumentDto?> GetDocument(Guid id);
+        public Task<DocumentInfo?> GetDocumentInfo(Guid id);
 
         public Task<DocumentDto?> CreateDocument(DocumentDto document);
 
         public Task<FolderInfo?> CreateFolder(FolderDto folder);
 
-        public Task<FolderInfo?> GetFolder(Guid id);
+        public Task<FolderInfo?> GetFolderInfo(Guid id);
+        public Task<FolderDto?> GetFolder(Guid id);
     }
 }

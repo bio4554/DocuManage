@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DocuManage.Data.Interfaces;
 
-namespace DocuManage.Data.Models
+namespace DocuManage.Common.Requests
 {
-    public class DocumentDto : IUniqueIdentifier
+    public class PostDocumentRequest
     {
-        public Guid? Id { get; set; }
         public string Name { get; set; }
         public Guid Folder { get; set; }
     }

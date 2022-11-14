@@ -1,4 +1,5 @@
-﻿using DocuManage.Common.Models;
+﻿using System.Text;
+using DocuManage.Common.Models;
 using DocuManage.Data.Interfaces;
 using DocuManage.Data.Models;
 using DocuManage.Logic.Interfaces;
@@ -52,16 +53,52 @@ namespace DocuManage.Logic.Services
             return response;
         }
 
-        public async Task<FolderInfo?> GetFolder(Guid id)
+        public async Task<FolderInfo?> GetFolderInfo(Guid id)
         {
             var folder = _documents.Single<FolderDto>(id);
             if (folder == null)
                 return null;
 
             var childFolders = _documents.GetAll<FolderDto>().Where(f => f.Parent == id);
-            var childDocs = _documents.GetAll<DocumentDto>().Where(d => d.Folder == folder);
+            var childDocs = _documents.GetAll<DocumentDto>().Where(d => d.Folder == id);
 
             var response = new FolderInfo(folder.Name, folder, childDocs.ToArray(), childFolders.ToArray());
+
+            return response;
+        }
+
+        public async Task<FolderDto?> GetFolder(Guid id)
+        {
+            return _documents.Single<FolderDto>(id);
+        }
+
+        public async Task<DocumentInfo?> GetDocumentInfo(Guid id)
+        {
+            var document = _documents.Single<DocumentDto>(id);
+
+            if (document is null) return null;
+
+
+            var pathBuilder = new StringBuilder();
+
+            var currentFolder = _documents.Single<FolderDto>(document.Folder);
+
+            if (currentFolder == null) 
+                throw new Exception("Folder mismatch");
+
+            while (currentFolder != null)
+            {
+                pathBuilder.Append("/");
+                pathBuilder.Append(currentFolder.Name);
+                currentFolder = _documents.Single<FolderDto>(currentFolder.Parent ?? Guid.Empty);
+            }
+
+            var response = new DocumentInfo()
+            {
+                Id = document.Id ?? Guid.Empty,
+                Title = document.Name,
+                Path = pathBuilder.ToString()
+            };
 
             return response;
         }

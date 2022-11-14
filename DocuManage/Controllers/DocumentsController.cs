@@ -1,4 +1,7 @@
-﻿using DocuManage.Data.Interfaces;
+﻿using DocuManage.Common.Requests;
+using DocuManage.Data.Interfaces;
+using DocuManage.Data.Models;
+using DocuManage.Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,9 +12,9 @@ namespace DocuManage
     [ApiController]
     public class DocumentsController : ControllerBase
     {
-        private readonly IDocumentRepository _documents;
+        private readonly IDocumentService _documents;
 
-        public DocumentsController(IDocumentRepository documents)
+        public DocumentsController(IDocumentService documents)
         {
             _documents = documents;
         }
@@ -25,15 +28,32 @@ namespace DocuManage
 
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
-        public string Get(string id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            return $"GET doc {id}";
+            var document = await _documents.GetDocumentInfo(id);
+
+            if(document == null) return NotFound();
+
+            return Ok(document);
         }
 
         // POST api/<ValuesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] PostDocumentRequest request)
         {
+            var folder = await _documents.GetFolder(request.Folder);
+
+            if (folder == null) return BadRequest();
+
+            var document = new DocumentDto()
+            {
+                Folder = folder.Id ?? Guid.Empty,
+                Name = request.Name
+            };
+
+            var newDocument = await _documents.CreateDocument(document);
+
+            return Ok(newDocument);
         }
 
         // PUT api/<ValuesController>/5
