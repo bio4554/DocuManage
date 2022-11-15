@@ -13,5 +13,7 @@ namespace DocuManage.Data.Models
         public string Name { get; set; }
         public Guid Folder { get; set; }
         public string? FileId { get; set; }
+        public string? Metadata { get; set; }
+        public long FileSize { get; set; }
     }
 }

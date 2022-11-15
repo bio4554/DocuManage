@@ -22,14 +22,14 @@ namespace DocuManage
             _log = loggerFactory.CreateLogger<DocumentsController>();
         }
 
-        // GET: api/<ValuesController>
+        // GET: api/<DocumentsController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok();
         }
 
-        // GET api/<ValuesController>/5
+        // GET api/<DocumentsController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDocument(Guid id)
         {
@@ -52,7 +52,15 @@ namespace DocuManage
             return new FileStreamResult(file, "application/pdf");
         }
 
-        // POST api/<ValuesController>
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateDocument(Guid id, [FromBody] UpdateDocumentRequest request)
+        {
+            var result = await _documents.UpdateDocument(id, request);
+            if(result == null) return NotFound();
+            return Ok(result);
+        }
+
+        // POST api/<DocumentsController>
         [HttpPost]
         [RequestSizeLimit(100_000_000)]
         public async Task<IActionResult> Post([FromForm] PostDocumentRequest request)
@@ -76,13 +84,13 @@ namespace DocuManage
             return Ok(newDocument);
         }
 
-        // PUT api/<ValuesController>/5
+        // PUT api/<DocumentsController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<ValuesController>/5
+        // DELETE api/<DocumentsController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

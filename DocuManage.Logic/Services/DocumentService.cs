@@ -1,5 +1,8 @@
 ﻿using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using DocuManage.Common.Models;
+using DocuManage.Common.Requests;
 using DocuManage.Data.Interfaces;
 using DocuManage.Data.Models;
 using DocuManage.Logic.Interfaces;
@@ -37,6 +40,8 @@ namespace DocuManage.Logic.Services
             var fileId = await _fileService.UploadFileAsync(formFile);
 
             document.FileId = fileId;
+            document.FileSize = formFile.Length;
+            document.Metadata ??= JsonSerializer.Serialize(new Dictionary<string, string>());
 
             _documents.Insert(document);
 
@@ -117,6 +122,44 @@ namespace DocuManage.Logic.Services
             };
 
             return response;
+        }
+
+        public async Task<DocumentInfo?> UpdateDocument(Guid id, UpdateDocumentRequest request)
+        {
+            var document = _documents.Single<DocumentDto>(id);
+            if (document == null) return null;
+
+            if (!string.IsNullOrEmpty(request.Name))
+            {
+                document.Name = request.Name;
+            }
+
+            if (request.Folder != null)
+            {
+                document.Folder = new Guid(request.Folder);
+            }
+
+            if (request.Metadata != null && request.Metadata.Any())
+            {
+                Dictionary<string, string> metadata = null;
+                if (!string.IsNullOrEmpty(document.Metadata))
+                {
+                    metadata = JsonSerializer.Deserialize<Dictionary<string, string>>(document.Metadata);
+                }
+                
+                metadata ??= new Dictionary<string, string>();
+
+                foreach (var pair in request.Metadata)
+                {
+                    metadata[pair.Key] = pair.Value;
+                }
+
+                document.Metadata = JsonSerializer.Serialize(metadata);
+            }
+
+            _documents.SaveChanges();
+
+            return await GetDocumentInfo(id);
         }
     }
 }
