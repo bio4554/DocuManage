@@ -77,10 +77,6 @@ namespace DocuManage
 
             var newDocument = await _documents.CreateDocument(document, request.File.Single());
 
-            var fileName = request.File.Single().FileName;
-
-            _log.LogInformation($"Uploaded file: {fileName}");
-
             return Ok(newDocument);
         }
 

@@ -15,7 +15,7 @@ namespace DocuManage.Logic.Interfaces
         public Task<DocumentDto?> GetDocument(Guid id);
         public Task<DocumentInfo?> GetDocumentInfo(Guid id);
 
-        public Task<DocumentDto?> CreateDocument(DocumentDto document, IFormFile formFile);
+        public Task<DocumentInfo?> CreateDocument(DocumentDto document, IFormFile formFile);
 
         public Task<FolderInfo?> CreateFolder(FolderDto folder);
 

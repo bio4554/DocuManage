@@ -7,6 +7,7 @@ using DocuManage.Data.Interfaces;
 using DocuManage.Data.Models;
 using DocuManage.Logic.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DocuManage.Logic.Services
 {
@@ -29,7 +30,7 @@ namespace DocuManage.Logic.Services
             return _documents.Single<DocumentDto>(id);
         }
 
-        public async Task<DocumentDto?> CreateDocument(DocumentDto document, IFormFile formFile)
+        public async Task<DocumentInfo?> CreateDocument(DocumentDto document, IFormFile formFile)
         {
             if (string.IsNullOrEmpty(document.Name))
                 return null;
@@ -47,7 +48,7 @@ namespace DocuManage.Logic.Services
 
             _documents.SaveChanges();
 
-            return document;
+            return await GetDocumentInfo(document.Id ?? Guid.Empty);
         }
 
         public async Task<FolderInfo?> CreateFolder(FolderDto folder)
@@ -60,7 +61,14 @@ namespace DocuManage.Logic.Services
             _documents.Insert(folder);
             _documents.SaveChanges();
 
-            var response = new FolderInfo(folder.Name, folder, Array.Empty<DocumentDto>(), Array.Empty<FolderDto>());
+            var response = new FolderInfo()
+            {
+                Documents = Array.Empty<DocumentInfo>(),
+                Folder = folder,
+                Folders = Array.Empty<FolderDto>(),
+                ParentFolder = _documents.Single<FolderDto>(folder.Parent ?? Guid.Empty),
+                FullPath = GetFullPath(folder)
+            };
 
             return response;
         }
@@ -71,10 +79,24 @@ namespace DocuManage.Logic.Services
             if (folder == null)
                 return null;
 
-            var childFolders = _documents.GetAll<FolderDto>().Where(f => f.Parent == id);
-            var childDocs = _documents.GetAll<DocumentDto>().Where(d => d.Folder == id);
+            var childFolders = _documents.GetAll<FolderDto>().Where(f => f.Parent == id).ToArray();
+            var childDocs = _documents.GetAll<DocumentDto>().Where(d => d.Folder == id).ToArray();
 
-            var response = new FolderInfo(folder.Name, folder, childDocs.ToArray(), childFolders.ToArray());
+            var documents = new List<DocumentInfo>();
+
+            foreach (var doc in childDocs)
+            {
+                documents.Add(await GetDocumentInfo(doc.Id ?? Guid.Empty));
+            }
+
+            var response = new FolderInfo()
+            {
+                Documents = documents.ToArray(),
+                Folder = folder,
+                Folders = childFolders.ToArray(),
+                ParentFolder = _documents.Single<FolderDto>(folder.Parent ?? Guid.Empty),
+                FullPath = GetFullPath(folder)
+            };
 
             return response;
         }
@@ -118,10 +140,30 @@ namespace DocuManage.Logic.Services
             {
                 Id = document.Id ?? Guid.Empty,
                 Title = document.Name,
-                Path = pathBuilder.ToString()
+                Path = pathBuilder.ToString(),
+                FileSize = document.FileSize,
+                Metadata = JsonSerializer.Deserialize<Dictionary<string, string>>(document.Metadata)
             };
 
             return response;
+        }
+
+        private string GetFullPath(FolderDto folder)
+        {
+            var pathBuilder = new StringBuilder();
+            var currentFolder = folder;
+
+            if (currentFolder == null)
+                throw new Exception("Folder mismatch");
+
+            while (currentFolder != null)
+            {
+                pathBuilder.Append("/");
+                pathBuilder.Append(currentFolder.Name);
+                currentFolder = _documents.Single<FolderDto>(currentFolder.Parent ?? Guid.Empty);
+            }
+
+            return pathBuilder.ToString();
         }
 
         public async Task<DocumentInfo?> UpdateDocument(Guid id, UpdateDocumentRequest request)
