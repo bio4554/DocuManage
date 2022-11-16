@@ -22,8 +22,8 @@ namespace DocuManage.Data.DB
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<FolderDto>();
-            modelBuilder.Entity<DocumentDto>();
+            modelBuilder.Entity<Folder>();
+            modelBuilder.Entity<Document>();
 
             base.OnModelCreating(modelBuilder);
         }

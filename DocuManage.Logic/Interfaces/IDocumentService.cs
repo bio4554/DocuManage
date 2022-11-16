@@ -12,16 +12,16 @@ namespace DocuManage.Logic.Interfaces
 {
     public interface IDocumentService
     {
-        public Task<DocumentDto?> GetDocument(Guid id);
-        public Task<DocumentInfo?> GetDocumentInfo(Guid id);
+        public Task<Document?> GetDocument(Guid id);
+        public Task<DocumentDto?> GetDocumentInfo(Guid id);
 
-        public Task<DocumentInfo?> CreateDocument(DocumentDto document, IFormFile formFile);
+        public Task<DocumentDto?> CreateDocument(Document document, IFormFile formFile);
 
-        public Task<FolderInfo?> CreateFolder(FolderDto folder);
+        public Task<FolderDto?> CreateFolder(Folder folder);
 
-        public Task<FolderInfo?> GetFolderInfo(Guid id);
-        public Task<FolderDto?> GetFolder(Guid id);
+        public Task<FolderDto?> GetFolderInfo(Guid id);
+        public Task<Folder?> GetFolder(Guid id);
         public Task<MemoryStream> GetFileStream(Guid id);
-        public Task<DocumentInfo?> UpdateDocument(Guid id, UpdateDocumentRequest request);
+        public Task<DocumentDto?> UpdateDocument(Guid id, UpdateDocumentRequest request);
     }
 }

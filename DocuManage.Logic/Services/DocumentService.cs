@@ -22,15 +22,15 @@ namespace DocuManage.Logic.Services
             _fileService = fileService;
         }
 
-        public async Task<DocumentDto?> GetDocument(Guid id)
+        public async Task<Document?> GetDocument(Guid id)
         {
             if (id == Guid.Empty)
                 return null;
 
-            return _documents.Single<DocumentDto>(id);
+            return _documents.Single<Document>(id);
         }
 
-        public async Task<DocumentInfo?> CreateDocument(DocumentDto document, IFormFile formFile)
+        public async Task<DocumentDto?> CreateDocument(Document document, IFormFile formFile)
         {
             if (string.IsNullOrEmpty(document.Name))
                 return null;
@@ -51,7 +51,7 @@ namespace DocuManage.Logic.Services
             return await GetDocumentInfo(document.Id ?? Guid.Empty);
         }
 
-        public async Task<FolderInfo?> CreateFolder(FolderDto folder)
+        public async Task<FolderDto?> CreateFolder(Folder folder)
         {
             if (string.IsNullOrEmpty(folder.Name))
             {
@@ -61,70 +61,70 @@ namespace DocuManage.Logic.Services
             _documents.Insert(folder);
             _documents.SaveChanges();
 
-            var response = new FolderInfo()
+            var response = new FolderDto()
             {
-                Documents = Array.Empty<DocumentInfo>(),
+                Documents = Array.Empty<DocumentDto>(),
                 Folder = folder,
-                Folders = Array.Empty<FolderDto>(),
-                ParentFolder = _documents.Single<FolderDto>(folder.Parent ?? Guid.Empty),
+                Folders = Array.Empty<Folder>(),
+                ParentFolder = _documents.Single<Folder>(folder.Parent ?? Guid.Empty),
                 FullPath = GetFullPath(folder)
             };
 
             return response;
         }
 
-        public async Task<FolderInfo?> GetFolderInfo(Guid id)
+        public async Task<FolderDto?> GetFolderInfo(Guid id)
         {
-            var folder = _documents.Single<FolderDto>(id);
+            var folder = _documents.Single<Folder>(id);
             if (folder == null)
                 return null;
 
-            var childFolders = _documents.GetAll<FolderDto>().Where(f => f.Parent == id).ToArray();
-            var childDocs = _documents.GetAll<DocumentDto>().Where(d => d.Folder == id).ToArray();
+            var childFolders = _documents.GetAll<Folder>().Where(f => f.Parent == id).ToArray();
+            var childDocs = _documents.GetAll<Document>().Where(d => d.Folder == id).ToArray();
 
-            var documents = new List<DocumentInfo>();
+            var documents = new List<DocumentDto>();
 
             foreach (var doc in childDocs)
             {
                 documents.Add(await GetDocumentInfo(doc.Id ?? Guid.Empty));
             }
 
-            var response = new FolderInfo()
+            var response = new FolderDto()
             {
                 Documents = documents.ToArray(),
                 Folder = folder,
                 Folders = childFolders.ToArray(),
-                ParentFolder = _documents.Single<FolderDto>(folder.Parent ?? Guid.Empty),
+                ParentFolder = _documents.Single<Folder>(folder.Parent ?? Guid.Empty),
                 FullPath = GetFullPath(folder)
             };
 
             return response;
         }
 
-        public async Task<FolderDto?> GetFolder(Guid id)
+        public async Task<Folder?> GetFolder(Guid id)
         {
-            return _documents.Single<FolderDto>(id);
+            return _documents.Single<Folder>(id);
         }
 
         public async Task<MemoryStream?> GetFileStream(Guid id)
         {
-            var document = _documents.Single<DocumentDto>(id);
+            var document = _documents.Single<Document>(id);
 
             if (document == null) return null;
 
             return await _fileService.GetFileAsync(new Guid(document.FileId ?? string.Empty));
         }
 
-        public async Task<DocumentInfo?> GetDocumentInfo(Guid id)
+        public async Task<DocumentDto?> GetDocumentInfo(Guid id)
         {
-            var document = _documents.Single<DocumentDto>(id);
+            var document = _documents.Single<Document>(id);
 
             if (document is null) return null;
 
 
             var pathBuilder = new StringBuilder();
 
-            var currentFolder = _documents.Single<FolderDto>(document.Folder);
+            var currentFolder = _documents.Single<Folder>(document.Folder);
 
             if (currentFolder == null) 
                 throw new Exception("Folder mismatch");
@@ -133,10 +133,10 @@ namespace DocuManage.Logic.Services
             {
                 pathBuilder.Append("/");
                 pathBuilder.Append(currentFolder.Name);
-                currentFolder = _documents.Single<FolderDto>(currentFolder.Parent ?? Guid.Empty);
+                currentFolder = _documents.Single<Folder>(currentFolder.Parent ?? Guid.Empty);
             }
 
-            var response = new DocumentInfo()
+            var response = new DocumentDto()
             {
                 Id = document.Id ?? Guid.Empty,
                 Title = document.Name,
@@ -148,7 +148,7 @@ namespace DocuManage.Logic.Services
             return response;
         }
 
-        private string GetFullPath(FolderDto folder)
+        private string GetFullPath(Folder folder)
         {
             var pathBuilder = new StringBuilder();
             var currentFolder = folder;
@@ -160,15 +160,15 @@ namespace DocuManage.Logic.Services
             {
                 pathBuilder.Append("/");
                 pathBuilder.Append(currentFolder.Name);
-                currentFolder = _documents.Single<FolderDto>(currentFolder.Parent ?? Guid.Empty);
+                currentFolder = _documents.Single<Folder>(currentFolder.Parent ?? Guid.Empty);
             }
 
             return pathBuilder.ToString();
         }
 
-        public async Task<DocumentInfo?> UpdateDocument(Guid id, UpdateDocumentRequest request)
+        public async Task<DocumentDto?> UpdateDocument(Guid id, UpdateDocumentRequest request)
         {
-            var document = _documents.Single<DocumentDto>(id);
+            var document = _documents.Single<Document>(id);
             if (document == null) return null;
 
             if (!string.IsNullOrEmpty(request.Name))

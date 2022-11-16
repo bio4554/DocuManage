@@ -29,6 +29,8 @@ namespace DocuManage.Controllers
 
         // GET api/<FolderController>/5
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(FolderDto), 200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> Get(string id)
         {
             var folder = await _documentService.GetFolderInfo(new Guid(id));
@@ -36,17 +38,20 @@ namespace DocuManage.Controllers
             {
                 return NotFound();
             }
+
             return Ok(folder);
         }
 
         // POST api/<FolderController>
         [HttpPost]
+        [ProducesResponseType(typeof(FolderDto), 200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> Post([FromBody] PostFolderRequest request)
         {
-            if(request.Parent == null)
+            if (request.Parent == null)
                 request.Parent = Guid.Empty;
 
-            var folder = new FolderDto()
+            var folder = new Folder()
             {
                 Name = request.Name,
                 Parent = request.Parent,

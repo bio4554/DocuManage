@@ -7,13 +7,10 @@ using DocuManage.Data.Interfaces;
 
 namespace DocuManage.Data.Models
 {
-    public class DocumentDto : IUniqueIdentifier
+    public class Folder : IUniqueIdentifier
     {
         public Guid? Id { get; set; }
         public string Name { get; set; }
-        public Guid Folder { get; set; }
-        public string? FileId { get; set; }
-        public string? Metadata { get; set; }
-        public long FileSize { get; set; }
+        public Guid? Parent { get; set; }
     }
 }

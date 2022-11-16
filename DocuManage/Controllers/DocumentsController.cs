@@ -1,4 +1,5 @@
-﻿using DocuManage.Common.Requests;
+﻿using DocuManage.Common.Models;
+using DocuManage.Common.Requests;
 using DocuManage.Data.Interfaces;
 using DocuManage.Data.Models;
 using DocuManage.Logic.Interfaces;
@@ -31,16 +32,20 @@ namespace DocuManage
 
         // GET api/<DocumentsController>/5
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(DocumentDto), 200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> GetDocument(Guid id)
         {
             var document = await _documents.GetDocumentInfo(id);
 
-            if(document == null) return NotFound();
+            if (document == null) return NotFound();
 
             return Ok(document);
         }
 
         [HttpGet("{id}/file")]
+        [ProducesResponseType(typeof(FileStreamResult), 200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> GetDocumentFile(Guid id)
         {
             var document = await _documents.GetDocumentInfo(id);
@@ -53,23 +58,27 @@ namespace DocuManage
         }
 
         [HttpPatch("{id}")]
+        [ProducesResponseType(typeof(DocumentDto), 200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> UpdateDocument(Guid id, [FromBody] UpdateDocumentRequest request)
         {
             var result = await _documents.UpdateDocument(id, request);
-            if(result == null) return NotFound();
+            if (result == null) return NotFound();
             return Ok(result);
         }
 
         // POST api/<DocumentsController>
         [HttpPost]
         [RequestSizeLimit(100_000_000)]
+        [ProducesResponseType(typeof(DocumentDto), 200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> Post([FromForm] PostDocumentRequest request)
         {
             var folder = await _documents.GetFolder(request.Folder);
 
             if (folder == null) return BadRequest();
 
-            var document = new DocumentDto()
+            var document = new Document()
             {
                 Folder = folder.Id ?? Guid.Empty,
                 Name = request.Name

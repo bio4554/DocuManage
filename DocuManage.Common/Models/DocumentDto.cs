@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DocuManage.Common.Models
 {
-    public class DocumentInfo
+    public class DocumentDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
