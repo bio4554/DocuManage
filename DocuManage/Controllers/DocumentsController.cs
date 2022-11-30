@@ -23,13 +23,6 @@ namespace DocuManage
             _log = loggerFactory.CreateLogger<DocumentsController>();
         }
 
-        // GET: api/<DocumentsController>
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            return Ok();
-        }
-
         // GET api/<DocumentsController>/5
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(DocumentDto), 200)]
@@ -87,18 +80,6 @@ namespace DocuManage
             var newDocument = await _documents.CreateDocument(document, request.File.Single());
 
             return Ok(newDocument);
-        }
-
-        // PUT api/<DocumentsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<DocumentsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

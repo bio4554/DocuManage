@@ -19,7 +19,6 @@ namespace DocuManage.Controllers
             _documentService = documentService;
         }
 
-
         // GET: api/<FolderController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -65,18 +64,6 @@ namespace DocuManage.Controllers
             }
 
             return Ok(newFolder);
-        }
-
-        // PUT api/<FolderController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<FolderController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
