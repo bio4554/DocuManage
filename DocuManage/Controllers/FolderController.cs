@@ -21,9 +21,11 @@ namespace DocuManage.Controllers
 
         // GET: api/<FolderController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        [ProducesResponseType(typeof(FolderDto), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            return await Get(Guid.Empty.ToString());
         }
 
         // GET api/<FolderController>/5

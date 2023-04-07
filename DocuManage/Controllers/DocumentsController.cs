@@ -69,11 +69,11 @@ namespace DocuManage
         {
             var folder = await _documents.GetFolder(request.Folder);
 
-            if (folder == null) return BadRequest();
+            if (folder == null && request.Folder != Guid.Empty) return BadRequest();
 
             var document = new Document()
             {
-                Folder = folder.Id ?? Guid.Empty,
+                Folder = folder?.Id ?? Guid.Empty,
                 Name = request.Name
             };
 

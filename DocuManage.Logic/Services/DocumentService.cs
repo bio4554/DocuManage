@@ -75,9 +75,21 @@ namespace DocuManage.Logic.Services
 
         public async Task<FolderDto?> GetFolderInfo(Guid id)
         {
-            var folder = _documents.Single<Folder>(id);
-            if (folder == null)
-                return null;
+            Folder? folder;
+            
+            // check if root folder
+            if (id == Guid.Empty)
+            {
+                folder = new Folder() { Id = Guid.Empty, Name = "Root", Parent = null };
+            }
+            else
+            {
+
+                folder = _documents.Single<Folder>(id);
+                if (folder == null)
+                    return null;
+
+            }
 
             var childFolders = _documents.GetAll<Folder>().Where(f => f.Parent == id).ToArray();
             var childDocs = _documents.GetAll<Document>().Where(d => d.Folder == id).ToArray();
@@ -126,8 +138,8 @@ namespace DocuManage.Logic.Services
 
             var currentFolder = _documents.Single<Folder>(document.Folder);
 
-            if (currentFolder == null) 
-                throw new Exception("Folder mismatch");
+            // if (currentFolder == null) 
+            //     throw new Exception("Folder mismatch");
 
             while (currentFolder != null)
             {
