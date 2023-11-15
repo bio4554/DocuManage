@@ -1,8 +1,0 @@
-﻿cd into solution directory
-
-
-// create migration
-dotnet ef migrations add InitialCreate --project DocuManage.Data --startup-project DocuManage
-
-// publish to db
-dotnet ef database update --project DocuManage.Data --startup-project DocuManage
