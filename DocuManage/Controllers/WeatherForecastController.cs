@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace DocuManage.Controllers
+namespace DocuManage.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]

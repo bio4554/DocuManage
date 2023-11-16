@@ -1,4 +1,4 @@
-namespace DocuManage
+namespace DocuManage.API
 {
     public class WeatherForecast
     {

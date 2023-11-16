@@ -1,0 +1,3 @@
+﻿dotnet ef migrations add Init --project .\DocuManage.DAL\DocuManage.DAL.csproj --startup-project .\DocuManage\DocuManage.API.csproj
+
+dotnet ef database update --project .\DocuManage.DAL\DocuManage.DAL.csproj --startup-project .\DocuManage\DocuManage.API.csproj

@@ -1,5 +1,8 @@
 
-namespace DocuManage
+using DocuManage.DAL;
+using Microsoft.EntityFrameworkCore;
+
+namespace DocuManage.API
 {
     public class Program
     {
@@ -8,6 +11,9 @@ namespace DocuManage
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddDbContextPool<DocuManageContext>(o =>
+                o.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

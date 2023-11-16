@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34310.174
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocuManage", "DocuManage\DocuManage.csproj", "{04FCF936-A053-4A9F-8C6A-94877B1492A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocuManage.API", "DocuManage\DocuManage.API.csproj", "{04FCF936-A053-4A9F-8C6A-94877B1492A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocuManage.DAL", "DocuManage.DAL\DocuManage.DAL.csproj", "{49307A58-C6F7-411A-8AE8-CF17BBAE2958}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocuManage.Logic", "DocuManage.Logic\DocuManage.Logic.csproj", "{D0F86807-632C-4009-A0F3-43FB86C08A8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocuManage.FileManager", "DocuManage.FileManager\DocuManage.FileManager.csproj", "{A4CE9401-1D20-4F64-A6C3-668516772422}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocuManage.Common", "DocuManage.Common\DocuManage.Common.csproj", "{44A117F7-2999-4427-9497-AD4F8C0C3D8F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +23,22 @@ Global
 		{04FCF936-A053-4A9F-8C6A-94877B1492A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04FCF936-A053-4A9F-8C6A-94877B1492A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04FCF936-A053-4A9F-8C6A-94877B1492A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49307A58-C6F7-411A-8AE8-CF17BBAE2958}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49307A58-C6F7-411A-8AE8-CF17BBAE2958}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49307A58-C6F7-411A-8AE8-CF17BBAE2958}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49307A58-C6F7-411A-8AE8-CF17BBAE2958}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0F86807-632C-4009-A0F3-43FB86C08A8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0F86807-632C-4009-A0F3-43FB86C08A8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0F86807-632C-4009-A0F3-43FB86C08A8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0F86807-632C-4009-A0F3-43FB86C08A8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4CE9401-1D20-4F64-A6C3-668516772422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4CE9401-1D20-4F64-A6C3-668516772422}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4CE9401-1D20-4F64-A6C3-668516772422}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4CE9401-1D20-4F64-A6C3-668516772422}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44A117F7-2999-4427-9497-AD4F8C0C3D8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44A117F7-2999-4427-9497-AD4F8C0C3D8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44A117F7-2999-4427-9497-AD4F8C0C3D8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44A117F7-2999-4427-9497-AD4F8C0C3D8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
